@@ -36,6 +36,8 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
 
     case 'POST':
-        echo 'OK';
+        echo json_encode([
+            'result' => 'OK',
+        ], JSON_PRETTY_PRINT);
         break;
 }

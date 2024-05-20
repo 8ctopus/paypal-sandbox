@@ -16,12 +16,11 @@
 </style>
 <script type="module">
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
   const button = document.querySelector('button');
 
-  button.addEventListener('click', function () {
-
-    fetch(window.location, {
+  button.addEventListener('click', async () => {
+    const response = await fetch(window.location, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -31,12 +30,16 @@ document.addEventListener('DOMContentLoaded', function () {
         currency: 'USD',
         description: 'Ice cream',
       }),
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data);
-      // REM window.location.href = data.redirect;
     });
+
+    if (!response.ok) {
+      console.error(response.statusText);
+      return;
+    }
+
+    const json = await response.json();
+
+    console.log(json.result);
   });
 });
 
