@@ -93,6 +93,7 @@ class Store
                         throw new Exception("unknown route - {$path}");
                 }
 
+                // no break
             case 'POST':
                 return $this->createOrder();
         }

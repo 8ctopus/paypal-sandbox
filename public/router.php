@@ -15,4 +15,3 @@ $response = (new Store($serverRequest))
 
 (new SapiEmitter())
     ->emit($response);
-
