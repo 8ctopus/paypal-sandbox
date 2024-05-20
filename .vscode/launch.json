@@ -2,6 +2,14 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "php docker (9000)",
+      "type": "php",
+      "request": "launch",
+      "port": 9000,
+      "log": false,
+      "stopOnEntry": false
+    },
+    {
       "name": "php listen CLI",
       "type": "php",
       "port": 9000,
