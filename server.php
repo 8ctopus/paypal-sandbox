@@ -8,7 +8,6 @@ use Twig\Loader\FilesystemLoader;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-/*
 $file = __DIR__ . '/.env.php';
 
 if (!file_exists($file)) {
@@ -19,25 +18,34 @@ if (!file_exists($file)) {
 }
 
 $config = Config::load($file);
-*/
 
 switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':
-        $loader = new FilesystemLoader(__DIR__ . '/views');
-
-        $environment = new Environment($loader, [
-            'auto_reload' => true,
-            'cache' => sys_get_temp_dir(),
-            'debug' => false,
-            'strict_variables' => true,
-        ]);
-
-        echo $environment->render('Store.twig', []);
+        get();
         break;
 
     case 'POST':
-        echo json_encode([
-            'result' => 'OK',
-        ], JSON_PRETTY_PRINT);
+        post();
         break;
+}
+
+function get() : void
+{
+    $loader = new FilesystemLoader(__DIR__ . '/views');
+
+    $environment = new Environment($loader, [
+        'auto_reload' => true,
+        'cache' => sys_get_temp_dir(),
+        'debug' => false,
+        'strict_variables' => true,
+    ]);
+
+    echo $environment->render('Store.twig', []);
+}
+
+function post() : void
+{
+    echo json_encode([
+        'result' => 'OK',
+    ], JSON_PRETTY_PRINT);
 }
