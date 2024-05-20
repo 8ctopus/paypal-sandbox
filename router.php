@@ -2,7 +2,11 @@
 
 declare(strict_types=1);
 
+use HttpSoft\Emitter\SapiEmitter;
+use HttpSoft\Message\Response;
+use HttpSoft\Message\Stream;
 use Noodlehaus\Config;
+use Psr\Http\Message\ResponseInterface;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
@@ -21,15 +25,18 @@ $config = Config::load($file);
 
 switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':
-        get();
+        $response = show();
         break;
 
     case 'POST':
-        post();
+        $response = purchase();
         break;
 }
 
-function get() : void
+(new SapiEmitter())
+    ->emit($response);
+
+function show() : ResponseInterface
 {
     $loader = new FilesystemLoader(__DIR__ . '/views');
 
@@ -40,12 +47,46 @@ function get() : void
         'strict_variables' => true,
     ]);
 
-    echo $environment->render('Store.twig', []);
+    $output = $environment->render('Store.twig', []);
+
+    $stream = new Stream();
+    $stream->write($output);
+
+    return new Response(200, ['Content-Type' => 'text/html'], $stream);
 }
 
-function post() : void
+function purchase() : ResponseInterface
 {
-    echo json_encode([
+    /*
+$router->add('orders create <intent> <amount> <currency>', static function (array $args) use ($sandbox, $handler, $auth) : void {
+    $orders = new Orders($sandbox, $handler, $auth);
+    $response = $orders->create(Intent::fromLowerCase($args['intent']), $args['currency'], (float) $args['amount']);
+
+    echo "go to https://www.sandbox.paypal.com/checkoutnow?token={$response['id']} to approve the payment and finally capture the payment\n\n";
+
+    dump($response);
+});
+
+$router->add('orders get <id>', static function (array $args) use ($sandbox, $handler, $auth) : void {
+    $orders = new Orders($sandbox, $handler, $auth);
+    dump($orders->get($args['id']));
+});
+
+$router->add('orders authorize <id>', static function (array $args) use ($sandbox, $handler, $auth) : void {
+    $orders = new Orders($sandbox, $handler, $auth);
+    dump($orders->authorize($args['id']));
+});
+
+$router->add('orders capture <id>', static function (array $args) use ($sandbox, $handler, $auth) : void {
+    $orders = new Orders($sandbox, $handler, $auth);
+    dump($orders->capture($args['id']));
+});
+*/
+
+    $stream = new Stream();
+    $stream->write(json_encode([
         'result' => 'OK',
-    ], JSON_PRETTY_PRINT);
+    ], JSON_PRETTY_PRINT));
+
+    return new Response(200, ['Content-Type' => 'application/json'], $stream);
 }

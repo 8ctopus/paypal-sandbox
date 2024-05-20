@@ -4,5 +4,5 @@
 
 ```sh
 composer install
-php -S localhost:80 server.php
+php -S localhost:80 router.php
 ```
