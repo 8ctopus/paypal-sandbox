@@ -31,7 +31,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Oct8pus\\PayPal\\": "src"
+            "Oct8pus\\": "src"
         }
     },
     "scripts": {
