@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oct8pus\Store;
 
+use Exception;
 use HttpSoft\Message\RequestFactory;
 use HttpSoft\Message\Response;
 use HttpSoft\Message\Stream;
@@ -27,6 +28,7 @@ class Store
     private readonly HttpHandler $handler;
     private readonly bool $sandbox;
     private readonly Orders $orders;
+    private readonly Environment $environment;
 
     public function __construct(ServerRequestInterface $request)
     {
@@ -57,31 +59,48 @@ class Store
         $auth = new OAuthCache($this->sandbox, $this->handler, $this->config->get('paypal.rest.id'), $this->config->get('paypal.rest.secret'), __DIR__ . '/../.cache.json');
 
         $this->orders = new Orders($this->sandbox, $this->handler, $auth);
+
+        $loader = new FilesystemLoader(__DIR__ . '/../views');
+
+        $this->environment = new Environment($loader, [
+            'auto_reload' => true,
+            'cache' => sys_get_temp_dir(),
+            'debug' => false,
+            'strict_variables' => true,
+        ]);
     }
 
     public function run() : ResponseInterface
     {
         switch ($this->request->getMethod()) {
             case 'GET':
-                return $this->show();
+                $path = $this->request->getUri()->getPath();
+
+                switch ($path) {
+                    case '/':
+                        return $this->showStore();
+
+                    case '/success/':
+                        return $this->capturePayment();
+
+                    case '/cancel/':
+                        return $this->showCancel();
+
+                    case '/favicon.ico':
+                        return new Response(404);
+
+                    default:
+                        throw new Exception("unknown route - {$path}");
+                }
 
             case 'POST':
                 return $this->createOrder();
         }
     }
 
-    private function show() : ResponseInterface
+    private function showStore() : ResponseInterface
     {
-        $loader = new FilesystemLoader(__DIR__ . '/../views');
-
-        $environment = new Environment($loader, [
-            'auto_reload' => true,
-            'cache' => sys_get_temp_dir(),
-            'debug' => false,
-            'strict_variables' => true,
-        ]);
-
-        $output = $environment->render('Store.twig', []);
+        $output = $this->environment->render('Store.twig', []);
 
         $stream = new Stream();
         $stream->write($output);
@@ -92,16 +111,14 @@ class Store
     private function createOrder() : ResponseInterface
     {
         /*
-        $router->add('orders get <id>', static function (array $args) use ($sandbox, $this->handler, $auth) : void {
-            $orders = new Orders($sandbox, $this->handler, $auth);
-            dump($orders->get($args['id']));
-        });
+        $orders = new Orders($sandbox, $this->handler, $auth);
+        dump($orders->get($args['id']));
         */
 
         $json = json_decode((string) $this->request->getBody(), true);
 
         try {
-            $response = $this->orders->create(Intent::Capture, $json['currency'], $json['amount']);
+            $response = $this->orders->create(Intent::Capture, $json['currency'], $json['amount'], 'http://localhost/success/', 'http://localhost/cancel/');
         } catch (PayPalException $exception) {
             throw $exception;
         }
@@ -118,14 +135,31 @@ class Store
         return new Response(200, ['Content-Type' => 'application/json'], $stream);
     }
 
-    private function capturePayment() : void
+    private function capturePayment() : ResponseInterface
     {
-        $json = json_decode((string) $this->request->getBody(), true);
+        $params = $this->request->getQueryParams();
 
         try {
-            $response = $this->orders->capture($json['id']);
+            $response = $this->orders->capture($params['token']);
+
+            $output = $this->environment->render('Success.twig', []);
+
+            $stream = new Stream();
+            $stream->write($output);
+
+            return new Response(200, ['Content-Type' => 'text/html'], $stream);
         } catch (PayPalException $exception) {
             throw $exception;
         }
+    }
+
+    private function showCancel() : ResponseInterface
+    {
+        $output = $this->environment->render('Cancel.twig', []);
+
+        $stream = new Stream();
+        $stream->write($output);
+
+        return new Response(200, ['Content-Type' => 'text/html'], $stream);
     }
 }
