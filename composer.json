@@ -16,6 +16,7 @@
         "8ctopus/paypal-rest-api": "^1.0",
         "httpsoft/http-emitter": "^1.1",
         "httpsoft/http-message": "^1.1",
+        "httpsoft/http-server-request": "^1.1",
         "twig/twig": "^3.10"
     },
     "require-dev": {

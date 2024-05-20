@@ -7,11 +7,19 @@ namespace Oct8pus;
 use HttpSoft\Message\Response;
 use HttpSoft\Message\Stream;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
 class Store
 {
+    private readonly ServerRequestInterface $request;
+
+    public function __construct(ServerRequestInterface $request)
+    {
+        $this->request = $request;
+    }
+
     public function run() : ResponseInterface
     {
         /*
@@ -27,7 +35,7 @@ class Store
         $config = Config::load($file);
         */
 
-        switch ($_SERVER['REQUEST_METHOD']) {
+        switch ($this->request->getMethod()) {
             case 'GET':
                 return $this->show();
 
