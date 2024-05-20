@@ -17,6 +17,7 @@
         "httpsoft/http-emitter": "^1.1",
         "httpsoft/http-message": "^1.1",
         "httpsoft/http-server-request": "^1.1",
+        "nimbly/shuttle": "^1.0",
         "twig/twig": "^3.10"
     },
     "require-dev": {
@@ -32,7 +33,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Oct8pus\\": "src"
+            "Oct8pus\\Store\\": "src"
         }
     },
     "scripts": {

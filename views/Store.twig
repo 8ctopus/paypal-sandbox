@@ -40,6 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const json = await response.json();
 
     console.log(json.result);
+
+    window.location = json.redirect;
   });
 });
 

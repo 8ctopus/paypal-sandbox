@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use HttpSoft\Emitter\SapiEmitter;
 use HttpSoft\ServerRequest\ServerRequestCreator;
-use Oct8pus\Store;
+use Oct8pus\Store\Store;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
