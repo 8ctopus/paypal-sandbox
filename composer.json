@@ -1,0 +1,39 @@
+{
+    "name": "8ctopus/paypal-sandbox",
+    "type": "library",
+    "description": "PayPal sandbox",
+    "keywords": ["paypal", "REST", "API", "sandbox"],
+    "homepage": "https://github.com/8ctopus/paypal-sandbox",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "8ctopus",
+            "email": "hello@octopuslabs.io"
+        }
+    ],
+    "require": {
+        "php": ">=8.1"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.8",
+        "phpmd/phpmd": "^2.13",
+        "phpstan/phpstan": "^1.9",
+        "hassankhan/config": "^3.1"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "Oct8pus\\PayPal\\": "src"
+        }
+    },
+    "scripts": {
+        "fix": "php-cs-fixer fix --verbose",
+        "fix-risky": "php-cs-fixer fix --allow-risky=yes --verbose",
+        "phpstan": "phpstan analyse --level 8 src",
+        "phpmd": "phpmd src ansi phpmd.xml"
+    }
+}
