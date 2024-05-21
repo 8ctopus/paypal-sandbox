@@ -4,15 +4,20 @@ Playing with the PayPal REST api. Still a work in progress...
 
 ## demo
 
-Copy `.env.example` to `.env` and fill in your PayPal REST api credentials. If you don't have credentials yet, go to and follow the guide:
-
-    https://developer.paypal.com/api/rest/
-
-Install composer dependencies and start the local server
+Install composer dependencies
 
 ```sh
 composer install
+```
+
+Copy `.env.example` to `.env` and fill in your PayPal REST api credentials. If you don't have credentials yet, follow the guide:
+
+    https://developer.paypal.com/api/rest/
+
+Start the website
+
+```sh
 php -S localhost:80 public/router.php
 ```
 
-Finally head to `http://localhost` in your browser.
+Finally head to `http://localhost` in your browser
