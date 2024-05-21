@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Oct8pus\Store;
 
-use Exception;
 use HttpSoft\Message\RequestFactory;
 use HttpSoft\Message\Response;
 use HttpSoft\Message\Stream;
