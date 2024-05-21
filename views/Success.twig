@@ -1,19 +1,6 @@
-<!DOCTYPE html>
-<html lang="en-US" class="dark-mode">
-<head>
-<meta charset="UTF-8">
-<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=5">
-<title>PayPal sandbox</title>
-<link href="https://cdn.jsdelivr.net/gh/codazoda/neatcss@v1.0.12/neat.css" rel="stylesheet" crossorigin="anonymous" integrity="d5aba09c5ea7ca3260a07edbb3acf62813e607b8c0f01d2580fc1c57103bb643">
-<style>
-
-:root {
-  margin-top: 2rem;
-  border-top: none;
-}
-
-</style>
+{% set title = "Payment success" %}
+{% extends "Base.twig" %}
+{% block head %}
 <script type="module">
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -26,8 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 </script>
-</head>
-<body>
+{% endblock %}
+{% block body %}
+<div class="container">
   Payment <span></span> successful
-</body>
-</html>
+</div>
+{% endblock %}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{{ title }}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" crossorigin="anonymous" integrity="0269018275915a04492010a90829b0b9cfe66ce59358a7a99055e29a8d6742a9">
+<style type="text/css">
+
+:root {
+  font-family: sans-serif;
+  white-space: nowrap;
+  margin-top: 2rem;
+}
+
+@media (min-width: 1200px) {
+  :root {
+    --font-size: 18px;
+  }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  --typography-spacing-vertical: 1rem;
+}
+
+button {
+  width: unset;
+}
+
+table {
+  --line-height: 0.8;
+}
+
+ul,
+pre {
+  margin-top: 1rem;
+}
+
+table[role=grid] tbody tr:hover {
+  filter: brightness(1.5);
+}
+
+table[role=grid] tbody tr:hover:nth-child(odd) {
+  filter: brightness(1.5);
+}
+
+</style>
+{% block css %}
+{% endblock %}
+{% block head %}
+{% endblock %}
+</head>
+<body>
+{% block body %}
+{% endblock %}
+</body>
+</html>
