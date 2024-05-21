@@ -6,17 +6,101 @@
 <script type="module">
 
 document.addEventListener('DOMContentLoaded', () => {
-  const buttons = document.querySelectorAll('button');
+  const buttons = document.querySelectorAll('div.onetime > button');
 
   buttons.forEach(function (button) {
-    button.addEventListener('click', buttonClick);
+    button.addEventListener('click', createOrder);
   });
+
+  let button = document.querySelector('button#createProduct');
+  button.addEventListener('click', createProduct);
+
+  button = document.querySelector('button#createPlan');
+  button.addEventListener('click', createPlan);
+
+  button = document.querySelector('button#createSubscription');
+  button.addEventListener('click', createSubscription);
 });
 
-async function buttonClick(event) {
+async function createOrder(event) {
   const button = event.target;
 
-  const response = await fetch({{ url }}, {
+  const response = await fetch({{ createOrderUrl }}, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      amount: button.dataset.amount,
+      currency: button.dataset.currency,
+      description: button.textContent,
+    }),
+  });
+
+  if (!response.ok) {
+    console.error(response.statusText);
+    return;
+  }
+
+  const json = await response.json();
+
+  console.log(json.result);
+
+  window.location = json.redirect;
+}
+
+async function createProduct(event) {
+  const response = await fetch({{ createProductUrl }}, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      name: 'Mobile internet monthly subscription',
+      type: 'service',
+    }),
+  });
+
+  const textArea = document.querySelector('textarea');
+
+  if (!response.ok) {
+      textArea.innerText = await response.text();
+    return;
+  }
+
+  const json = await response.json();
+
+  textArea.innerText = json.result;
+}
+
+async function createPlan(event) {
+  const response = await fetch({{ createPlanUrl }}, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      name: 'Mobile internet monthly subscription',
+      type: 'service',
+    }),
+  });
+
+  if (!response.ok) {
+    console.error(response.statusText);
+    return;
+  }
+
+  const json = await response.json();
+
+  const textArea = document.querySelector('textarea');
+
+  textArea.innerText = json.result;
+}
+
+async function createSubscription(event) {
+  const button = event.target;
+
+  const response = await fetch({{ createSubscriptionUrl }}, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -44,8 +128,19 @@ async function buttonClick(event) {
 {% endblock %}
 {% block body %}
 <div class="container">
-  <h1> Choose one of our delicious ice creams </h1>
-  <button data-currency="USD" data-amount=3>Chocolate Ice Cream $3</button>
-  <button data-currency="USD" data-amount=3>Vanilla Ice Cream $3</button>
+  <div class="onetime">
+    <h1> One-time payment </h1>
+    <button data-currency="USD" data-amount=3>Chocolate Ice Cream $3</button>
+    <button data-currency="USD" data-amount=3>Vanilla Ice Cream $3</button>
+  </div>
+  <div class="subscription">
+    <h1> Subscription </h1>
+    <p> For subscriptions, you first need to create a product, then a plan that uses that product. Finally, you can get users to subscribe </p>
+    <button id="createProduct">create product</button>
+    <button id="createPlan">create plan</button>
+    <button id="createSubscription">Mobile internet monthly subscription $3</button>
+  </div>
+  <textarea>
+  </textarea>
 </div>
 {% endblock %}
