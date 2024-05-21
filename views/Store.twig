@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const button = document.querySelector('button');
 
   button.addEventListener('click', async () => {
-    const response = await fetch(window.location, {
+    const response = await fetch({{ url }}, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

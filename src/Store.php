@@ -70,6 +70,7 @@ class Store
         ]);
     }
 
+    /* REM
     public function run() : ResponseInterface
     {
         switch ($this->request->getMethod()) {
@@ -98,10 +99,13 @@ class Store
                 return $this->createOrder();
         }
     }
+    */
 
-    private function showStore() : ResponseInterface
+    public function showStore() : ResponseInterface
     {
-        $output = $this->environment->render('Store.twig', []);
+        $output = $this->environment->render('Store.twig', [
+            'url' => '/create-order/',
+        ]);
 
         $stream = new Stream();
         $stream->write($output);
@@ -109,7 +113,7 @@ class Store
         return new Response(200, ['Content-Type' => 'text/html'], $stream);
     }
 
-    private function createOrder() : ResponseInterface
+    public function createOrder() : ResponseInterface
     {
         /*
         $orders = new Orders($sandbox, $this->handler, $auth);
@@ -136,7 +140,7 @@ class Store
         return new Response(200, ['Content-Type' => 'application/json'], $stream);
     }
 
-    private function capturePayment() : ResponseInterface
+    public function capturePayment() : ResponseInterface
     {
         $params = $this->request->getQueryParams();
 
@@ -154,7 +158,7 @@ class Store
         }
     }
 
-    private function showCancel() : ResponseInterface
+    public function showCancel() : ResponseInterface
     {
         $output = $this->environment->render('Cancel.twig', []);
 
