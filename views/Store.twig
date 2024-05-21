@@ -26,9 +26,9 @@ document.addEventListener('DOMContentLoaded', () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        amount: 10,
-        currency: 'USD',
-        description: 'Ice cream',
+        amount: button.dataset.amount,
+        currency: button.dataset.currency,
+        description: button.textContent,
       }),
     });
 
@@ -48,6 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 </head>
 <body>
-  <button>buy ice cream</button>
+  <button data-currency="USD" data-amount=3>Chocolate Ice Cream</button>$3
 </body>
 </html>
