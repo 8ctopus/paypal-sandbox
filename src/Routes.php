@@ -20,7 +20,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
-class Store
+class Routes
 {
     private readonly ServerRequestInterface $request;
     private readonly Config $config;

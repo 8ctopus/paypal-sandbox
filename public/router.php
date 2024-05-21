@@ -9,7 +9,7 @@ use HttpSoft\ServerRequest\ServerRequestCreator;
 use Oct8pus\NanoRouter\NanoRouter;
 use Oct8pus\NanoRouter\Route;
 use Oct8pus\NanoRouter\RouteType;
-use Oct8pus\Store\Store;
+use Oct8pus\Store\Routes;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -20,22 +20,22 @@ $serverRequest = ServerRequestCreator::createFromGlobals($_SERVER, $_FILES, $_CO
 $router = new NanoRouter(Response::class, ServerRequestFactory::class, true, true);
 
 $router->addRoute(new Route(RouteType::Exact, 'GET', '/', static function (ServerRequestInterface $request) : ResponseInterface {
-    return (new Store($request))
+    return (new Routes($request))
         ->showStore();
 }));
 
 $router->addRoute(new Route(RouteType::Exact, 'GET', '/success/', static function (ServerRequestInterface $request) : ResponseInterface {
-    return (new Store($request))
+    return (new Routes($request))
         ->capturePayment();
 }));
 
 $router->addRoute(new Route(RouteType::Exact, 'GET', '/cancel/', static function (ServerRequestInterface $request) : ResponseInterface {
-    return (new Store($request))
+    return (new Routes($request))
         ->showCancel();
 }));
 
 $router->addRoute(new Route(RouteType::Exact, 'POST', '/create-order/', static function (ServerRequestInterface $request) : ResponseInterface {
-    return (new Store($request))
+    return (new Routes($request))
         ->createOrder();
 }));
 
