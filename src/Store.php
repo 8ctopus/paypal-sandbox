@@ -91,7 +91,7 @@ class Store
         $json = json_decode((string) $this->request->getBody(), true);
 
         try {
-            $response = $this->orders->create(Intent::Capture, $json['currency'], $json['amount'], 'http://localhost/success/', 'http://localhost/cancel/');
+            $response = $this->orders->create(Intent::Capture, $json['currency'], (int) $json['amount'], 'http://localhost/success/', 'http://localhost/cancel/');
         } catch (PayPalException $exception) {
             throw $exception;
         }

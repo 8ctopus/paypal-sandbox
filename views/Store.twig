@@ -6,39 +6,46 @@
 <script type="module">
 
 document.addEventListener('DOMContentLoaded', () => {
-  const button = document.querySelector('button');
+  const buttons = document.querySelectorAll('button');
 
-  button.addEventListener('click', async () => {
-    const response = await fetch({{ url }}, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        amount: button.dataset.amount,
-        currency: button.dataset.currency,
-        description: button.textContent,
-      }),
-    });
-
-    if (!response.ok) {
-      console.error(response.statusText);
-      return;
-    }
-
-    const json = await response.json();
-
-    console.log(json.result);
-
-    window.location = json.redirect;
+  buttons.forEach(function (button) {
+    button.addEventListener('click', buttonClick);
   });
 });
+
+async function buttonClick(event) {
+  const button = event.target;
+
+  const response = await fetch({{ url }}, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      amount: button.dataset.amount,
+      currency: button.dataset.currency,
+      description: button.textContent,
+    }),
+  });
+
+  if (!response.ok) {
+    console.error(response.statusText);
+    return;
+  }
+
+  const json = await response.json();
+
+  console.log(json.result);
+
+  window.location = json.redirect;
+}
 
 </script>
 {% endblock %}
 {% block body %}
 <div class="container">
-  <button data-currency="USD" data-amount=3>Chocolate Ice Cream $3 </button>
-  <button data-currency="USD" data-amount=3>Vanilla Ice Cream $3 </button>
+  <h1> Choose one of our delicious ice creams </h1>
+  <button data-currency="USD" data-amount=3>Chocolate Ice Cream $3</button>
+  <button data-currency="USD" data-amount=3>Vanilla Ice Cream $3</button>
 </div>
 {% endblock %}

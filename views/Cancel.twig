@@ -1,7 +1,21 @@
 {% set title = "Payment success" %}
 {% extends "Base.twig" %}
+{% block head %}
+<script type="module">
+
+document.addEventListener('DOMContentLoaded', () => {
+  const span = document.querySelector('span');
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const token = urlParams.get('token');
+
+  span.innerHTML = token;
+});
+
+</script>
+{% endblock %}
 {% block body %}
 <div class="container">
-  Payment canceled
+  Order <span></span> canceled
 </div>
 {% endblock %}
