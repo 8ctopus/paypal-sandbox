@@ -39,7 +39,7 @@ $router->addRoute(new Route(RouteType::Exact, 'POST', '/create-order/', function
         ->createOrder();
 }));
 
-$router->resolve($serverRequest);
+$response = $router->resolve($serverRequest);
 
 (new SapiEmitter())
     ->emit($response);
