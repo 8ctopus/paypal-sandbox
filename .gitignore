@@ -11,3 +11,4 @@
 /.php-cs-fixer.cache
 /.env.php
 /.cache.json
+/paypal-example/
