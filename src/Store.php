@@ -69,37 +69,6 @@ class Store
         ]);
     }
 
-    /* REM
-    public function run() : ResponseInterface
-    {
-        switch ($this->request->getMethod()) {
-            case 'GET':
-                $path = $this->request->getUri()->getPath();
-
-                switch ($path) {
-                    case '/':
-                        return $this->showStore();
-
-                    case '/success/':
-                        return $this->capturePayment();
-
-                    case '/cancel/':
-                        return $this->showCancel();
-
-                    case '/favicon.ico':
-                        return new Response(404);
-
-                    default:
-                        throw new Exception("unknown route - {$path}");
-                }
-
-                // no break
-            case 'POST':
-                return $this->createOrder();
-        }
-    }
-    */
-
     public function showStore() : ResponseInterface
     {
         $output = $this->environment->render('Store.twig', [
