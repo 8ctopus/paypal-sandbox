@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oct8pus\Store;
 
+use Exception;
 use HttpSoft\Message\RequestFactory;
 use HttpSoft\Message\Response;
 use HttpSoft\Message\Stream;
@@ -51,10 +52,7 @@ class Routes
         $file = __DIR__ . '/../.env.php';
 
         if (!file_exists($file)) {
-            echo <<<'TXT'
-            Please create env.php based on env.php.example
-
-            TXT;
+            throw new Exception('Please create env.php based on env.php.example');
         }
 
         $this->config = Config::load($file);
@@ -238,10 +236,11 @@ class Routes
 
         foreach ($response['links'] as $link) {
             if ($link['rel'] === 'approve') {
-                echo "redirect user to {$link['href']} to approve the subscription\n\n";
                 break;
             }
         }
+
+        $response['_aaa'] = "redirect user to {$link['href']} to approve the subscription";
 
         $stream = new Stream();
         $stream->write(json_encode($response, JSON_PRETTY_PRINT));

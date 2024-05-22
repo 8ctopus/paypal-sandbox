@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   listProducts();
-  //listPlans();
+  listPlans();
   listHooks();
 });
 
@@ -188,7 +188,18 @@ async function createPlan(event) {
 }
 
 async function createSubscription(event) {
-  const button = event.target;
+  const planId = document.querySelector('input#planId').value;
+  const url = document.querySelector('input#hookUrl').value;
+
+  if (!planId) {
+    log(component, 'plan id required', true);
+    return;
+  }
+
+  if (!url) {
+    log(component, 'webhook url required', true);
+    return;
+  }
 
   const response = await fetch({{ createSubscriptionUrl }}, {
     method: 'POST',
@@ -196,9 +207,9 @@ async function createSubscription(event) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      planId: 'x',
-      successUrl: 'http://localhost/subscription/success/',
-      cancelUrl: 'http://localhost/subscription/cancel/',
+      planId: planId,
+      successUrl: url + '/success/',
+      cancelUrl: url + '/cancel/',
     }),
   });
 
