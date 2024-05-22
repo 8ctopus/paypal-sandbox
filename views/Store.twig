@@ -1,34 +1,27 @@
 {% set title = "Store" %}
 {% extends "Base.twig" %}
 {% block css %}
-
 <style type="text/css">
 
-div.subscription {
+article#subscription {
   margin-top: 2rem;
 }
 
 </style>
-
 {% endblock %}
 {% block head %}
 <script type="module">
 
 document.addEventListener('DOMContentLoaded', () => {
-  const buttons = document.querySelectorAll('div.onetime > button');
+  const buttons = document.querySelectorAll('article#onetime > button');
 
   buttons.forEach(function (button) {
     button.addEventListener('click', createOrder);
   });
 
-  let button = document.querySelector('button#createProduct');
-  button.addEventListener('click', createProduct);
-
-  button = document.querySelector('button#createPlan');
-  button.addEventListener('click', createPlan);
-
-  button = document.querySelector('button#createSubscription');
-  button.addEventListener('click', createSubscription);
+  document.querySelector('button#createProduct').addEventListener('click', createProduct);
+  document.querySelector('button#createPlan').addEventListener('click', createPlan);
+  document.querySelector('button#createSubscription').addEventListener('click', createSubscription);
 });
 
 async function createOrder(event) {
@@ -137,20 +130,34 @@ async function createSubscription(event) {
 {% endblock %}
 {% block body %}
 <div class="container">
-  <div class="onetime">
+  <article id="onetime" class="component">
     <h1> One-time payment </h1>
     <button data-currency="USD" data-amount=3>Chocolate Ice Cream $3</button>
     <button data-currency="USD" data-amount=3>Vanilla Ice Cream $3</button>
-  </div>
-  <div class="subscription">
-    <h1> Subscription </h1>
-    <p> For subscriptions, you first need to create a product, then a plan that uses that product. Finally, you can get users to subscribe </p>
+  </article>
 
-    <button id="createProduct">create product</button>
-    <button id="createPlan">create plan</button>
+  <article id="subscription" class="component">
+    <h1> Subscription </h1>
+    <p> For subscriptions, you first need to create a product, then a plan that uses that product.<br>
+    Once you have a plan, you can subscribe. </p>
     <button id="createSubscription">Mobile internet monthly subscription $3</button>
-  </div>
-  <textarea>
-  </textarea>
+  </article>
+
+  <article id="products" class="component">
+    <textarea>
+    </textarea>
+    <button id="createProduct">create product</button>
+  </article>
+
+  <article id="plans" class="component">
+    <textarea>
+    </textarea>
+    <button id="createPlan">create plan</button>
+  </article>
+
+  <article class="component">
+    <textarea>
+    </textarea>
+  </article>
 </div>
 {% endblock %}
