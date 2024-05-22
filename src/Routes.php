@@ -87,14 +87,14 @@ class Routes
     public function showStore() : ResponseInterface
     {
         $output = $this->environment->render('Store.twig', [
-            'createOrderUrl' => '/create-order/',
-            'productsUrl' => '/list-products/',
-            'createProductUrl' => '/create-product/',
-            'plansUrl' => '/list-plans/',
-            'createPlanUrl' => '/create-plan/',
-            'createSubscriptionUrl' => '/create-subscription/',
-            'hooksUrl' => '/list-hooks/',
-            'createHookUrl' => '/create-hook/',
+            'createOrderUrl' => '/orders/',
+            'productsUrl' => '/products/',
+            'createProductUrl' => '/products/',
+            'plansUrl' => '/plans/',
+            'createPlanUrl' => '/plans/',
+            'createSubscriptionUrl' => '/subscriptions/',
+            'hooksUrl' => '/hooks/',
+            'createHookUrl' => '/hooks/',
         ]);
 
         $stream = new Stream();
