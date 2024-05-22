@@ -340,8 +340,8 @@ function log(component, message, logToConsole) {
     <h1> subscriptions </h1>
     <p> For subscriptions, you first need to create a product, then a plan that uses that product.<br>
     Once you have a plan, you can subscribe. </p>
-    <input id="planId" type="text"/>
-    <button id="createSubscription">Subscribe to copilot</button>
+    <input id="planId" type="text" placeholder="plan Id" />
+    <button id="createSubscription">Subscribe</button>
     <details>
       <summary>details</summary>
       <code></code>
@@ -359,7 +359,7 @@ function log(component, message, logToConsole) {
 
   <article id="plans" class="component">
     <h1> plans </h1>
-    <input id="productId" type="text"/>
+    <input id="productId" type="text" placeholder="product Id" />
     <button id="createPlan">create plan</button>
     <details>
       <summary>details</summary>
@@ -370,7 +370,7 @@ function log(component, message, logToConsole) {
   <article id="hooks" class="component">
     <h1> webhooks </h1>
     <p> To receive notifications about PayPal events (new payments, subscriptions, etc...), you need to setup a webhook. For the webhook to be received on your development machine, you will need to use ngrok or a similar tool. </p>
-    <input id="hookUrl" type="text"/>
+    <input id="hookUrl" type="text" placeholder="webhook url (create) or id (delete)" />
     <button id="createHook">create webhook</button>
     <button id="deleteHook">delete webhook</button>
     <details>
