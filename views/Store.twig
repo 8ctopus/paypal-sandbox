@@ -65,7 +65,7 @@ async function createOrder(event) {
   const component = 'article#order details code';
 
   if (!response.ok) {
-    log(component, response.statusText, true);
+    log(component, await response.text(), true);
     return;
   }
 
@@ -82,12 +82,12 @@ async function listProducts()
 
   const component = 'article#products details code';
 
+  const text = await response.text();
+
   if (!response.ok) {
-    log(component, response.statusText, true);
+    log(component, text, true);
     return;
   }
-
-  const text = await response.text();
 
   log(component, text, false);
 
@@ -118,8 +118,6 @@ async function createProduct(event) {
     log(component, await response.text(), true);
     return;
   }
-
-  log(component, await response.json(), false);
 }
 
 async function listPlans() {
@@ -127,12 +125,12 @@ async function listPlans() {
 
   const component = 'article#plans details code';
 
+  const text = await response.text();
+
   if (!response.ok) {
-    log(component, response.statusText, true);
+    log(component, text, true);
     return;
   }
-
-  const text = await response.text();
 
   log(component, text, false);
 
@@ -167,7 +165,7 @@ async function createPlan(event) {
   });
 
   if (!response.ok) {
-    log(component, response.statusText, true);
+    log(component, await response.text(), true);
     return;
   }
 
@@ -192,7 +190,7 @@ async function createSubscription(event) {
   const component = 'article#subscription textarea';
 
   if (!response.ok) {
-    log(component, response.statusText, true);
+    log(component, await response.text(), true);
     return;
   }
 
@@ -203,12 +201,12 @@ async function createSubscription(event) {
   window.location = json.redirect;
 }
 
-function log(component, message, console) {
-  document.querySelector(component).innerText = message;
-
-  if (console) {
+function log(component, message, logToConsole) {
+  if (logToConsole) {
     console.log(message);
   }
+
+  document.querySelector(component).innerText = message;
 }
 
 </script>
@@ -241,7 +239,7 @@ function log(component, message, console) {
     <button id="createProduct">create product</button>
     <details open>
       <summary>products</summary>
-      <code></code>
+      <code>loading...</code>
     </details>
   </article>
 
@@ -250,7 +248,7 @@ function log(component, message, console) {
     <button id="createPlan">create plan</button>
     <details open>
       <summary>plans</summary>
-      <code></code>
+      <code>loading...</code>
     </details>
   </article>
 </div>

@@ -173,7 +173,7 @@ class Routes
 
         $products = new Products($this->sandbox, $this->handler, $this->auth);
 
-        $response = $products->create([
+        $products->create([
             'name' => $json['name'],
             'description' => $json['description'],
             'type' => $json['type'], // Physical Goods, Digital Goods, Service
@@ -182,10 +182,7 @@ class Routes
             'image_url' => $json['imageUrl'],
         ]);
 
-        $stream = new Stream();
-        $stream->write(json_encode($response, JSON_PRETTY_PRINT));
-
-        return new Response(200, ['content-type' => 'application/json'], $stream);
+        return new Response(200);
     }
 
     public function plans() : ResponseInterface
