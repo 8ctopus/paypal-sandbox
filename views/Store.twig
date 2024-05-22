@@ -350,33 +350,33 @@ function log(component, message, logToConsole) {
 
   <article id="products" class="component">
     <h1> products </h1>
-    <button id="createProduct">create product</button>
     <details>
       <summary>details</summary>
       <code></code>
     </details>
+    <button id="createProduct">create product</button>
   </article>
 
   <article id="plans" class="component">
     <h1> plans </h1>
-    <input id="productId" type="text" placeholder="product Id" />
-    <button id="createPlan">create plan</button>
     <details>
       <summary>details</summary>
       <code></code>
     </details>
+    <input id="productId" type="text" placeholder="product Id" />
+    <button id="createPlan">create plan</button>
   </article>
 
   <article id="hooks" class="component">
     <h1> webhooks </h1>
     <p> To receive notifications about PayPal events (new payments, subscriptions, etc...), you need to setup a webhook. For the webhook to be received on your development machine, you will need to use ngrok or a similar tool. </p>
-    <input id="hookUrl" type="text" placeholder="webhook url (create) or id (delete)" />
-    <button id="createHook">create webhook</button>
-    <button id="deleteHook">delete webhook</button>
     <details>
       <summary>details</summary>
       <code></code>
     </details>
+    <input id="hookUrl" type="text" placeholder="webhook url (create) or id (delete)" />
+    <button id="createHook">create webhook</button>
+    <button id="deleteHook">delete webhook</button>
   </article>
 </div>
 {% endblock %}
