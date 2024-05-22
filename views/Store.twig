@@ -45,6 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   listProducts();
   listPlans();
+  listHooks();
 });
 
 async function createOrder(event) {
@@ -201,6 +202,76 @@ async function createSubscription(event) {
   window.location = json.redirect;
 }
 
+async function listHooks() {
+  const response = await fetch({{ hooksUrl }});
+
+  const component = 'article#hooks details code';
+
+  const text = await response.text();
+
+  if (!response.ok) {
+    log(component, text, true);
+    return;
+  }
+
+  log(component, text, false);
+}
+
+async function createHook(event) {
+  const component = 'article#hooks details code';
+
+  const url = document.querySelector('input#hookUrl').value;
+
+  if (!url) {
+    log(component, 'hook url required', true);
+    return;
+  }
+
+  const response = await fetch({{ createHookUrl }}, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      'url': url,
+      'eventTypes': [
+        // a payment on a subscription was made
+        'PAYMENT.SALE.COMPLETED',
+        // a payment on a subscription was refunded
+        'PAYMENT.SALE.REFUNDED',
+        // a payment on a subscription was reversed
+        'PAYMENT.SALE.REVERSED',
+
+        // user starts subscription process - it's not completed yet!
+        'BILLING.SUBSCRIPTION.CREATED',
+        // either user just subscribed to a plan - no payment yet or subscription resumed
+        'BILLING.SUBSCRIPTION.ACTIVATED',
+        // subscription expired
+        'BILLING.SUBSCRIPTION.EXPIRED',
+        // user subscription was canceled (from PayPal admin, REST api or from user side inside account)
+        'BILLING.SUBSCRIPTION.CANCELLED',
+        // subscription paused
+        'BILLING.SUBSCRIPTION.SUSPENDED',
+        // payment failed on subscription
+        'BILLING.SUBSCRIPTION.PAYMENT.FAILED',
+        // subscription is updated - how to do that? (like suspended, change of state? no)
+        'BILLING.SUBSCRIPTION.UPDATED',
+
+        //'PAYMENT.AUTHORIZATION.CREATED',
+        //'PAYMENT.AUTHORIZATION.VOIDED',
+        //'PAYMENT.CAPTURE.COMPLETED',
+      ]
+    }),
+  });
+
+  if (!response.ok) {
+    log(component, await response.text(), true);
+    return;
+  }
+
+  log(component, await response.json(), false);
+}
+
 function log(component, message, logToConsole) {
   if (logToConsole) {
     console.log(message);
@@ -214,7 +285,7 @@ function log(component, message, logToConsole) {
 {% block body %}
 <div class="container">
   <article id="order" class="component">
-    <h1> One-time payment </h1>
+    <h1> orders (one-time payments) </h1>
     <button data-currency="USD" data-amount=3>Chocolate Ice Cream $3</button>
     <button data-currency="USD" data-amount=3>Vanilla Ice Cream $3</button>
     <details open>
@@ -224,7 +295,7 @@ function log(component, message, logToConsole) {
   </article>
 
   <article id="subscription" class="component">
-    <h1> Subscription </h1>
+    <h1> subscriptions </h1>
     <p> For subscriptions, you first need to create a product, then a plan that uses that product.<br>
     Once you have a plan, you can subscribe. </p>
     <input id="planId" type="text"/>
@@ -236,6 +307,7 @@ function log(component, message, logToConsole) {
   </article>
 
   <article id="products" class="component">
+    <h1> products </h1>
     <button id="createProduct">create product</button>
     <details open>
       <summary>products</summary>
@@ -244,10 +316,21 @@ function log(component, message, logToConsole) {
   </article>
 
   <article id="plans" class="component">
+    <h1> plans </h1>
     <input id="productId" type="text"/>
     <button id="createPlan">create plan</button>
     <details open>
-      <summary>plans</summary>
+      <code>loading...</code>
+    </details>
+  </article>
+
+  <article id="webooks" class="component">
+    <h1> webhooks </h1>
+    <p> To receive notifications about PayPal events (new payments, subscriptions, etc...), you need to setup a webhook. </p>
+    <input id="hookUrl" type="text"/>
+    <button id="createHook">create webhook</button>
+    <button id="deleteHook">delete webhook</button>
+    <details open>
       <code>loading...</code>
     </details>
   </article>

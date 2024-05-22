@@ -10,6 +10,7 @@ use HttpSoft\Message\Stream;
 use HttpSoft\Message\StreamFactory;
 use Nimbly\Shuttle\Shuttle;
 use Noodlehaus\Config;
+use Oct8pus\PayPal\Hooks;
 use Oct8pus\PayPal\HttpHandler;
 use Oct8pus\PayPal\OAuthCache;
 use Oct8pus\PayPal\Orders;
@@ -92,6 +93,8 @@ class Routes
             'plansUrl' => '/plans/',
             'createPlanUrl' => '/create-plan/',
             'createSubscriptionUrl' => '/create-subscription/',
+            'hooksUrl' => '/hooks/',
+            'createHookUrl' => '/create-hook/',
         ]);
 
         $stream = new Stream();
@@ -155,7 +158,7 @@ class Routes
         return new Response(200, ['Content-Type' => 'text/html'], $stream);
     }
 
-    public function products() : ResponseInterface
+    public function listProducts() : ResponseInterface
     {
         $products = new Products($this->sandbox, $this->handler, $this->auth);
 
@@ -185,7 +188,7 @@ class Routes
         return new Response(200);
     }
 
-    public function plans() : ResponseInterface
+    public function listPlans() : ResponseInterface
     {
         $plans = new Plans($this->sandbox, $this->handler, $this->auth);
 
@@ -244,5 +247,42 @@ class Routes
         $stream->write(json_encode($response, JSON_PRETTY_PRINT));
 
         return new Response(200, ['content-type' => 'application/json'], $stream);
+    }
+
+    public function listHooks() : ResponseInterface
+    {
+        $hooks = new Hooks($this->sandbox, $this->handler, $this->auth);
+
+        $response = $hooks->list();
+
+        $stream = new Stream();
+        $stream->write(json_encode($response, JSON_PRETTY_PRINT));
+
+        return new Response(200, ['content-type' => 'application/json'], $stream);
+    }
+
+    public function createHook() : ResponseInterface
+    {
+        $json = json_decode((string) $this->request->getBody(), true);
+
+        $hooks = new Hooks($this->sandbox, $this->handler, $this->auth);
+
+        $response = $hooks->create($json['url'], $json['eventTypes']);
+
+        $stream = new Stream();
+        $stream->write(json_encode($response, JSON_PRETTY_PRINT));
+
+        return new Response(200, ['content-type' => 'application/json'], $stream);
+    }
+
+    public function deleteHook() : ResponseInterface
+    {
+        $json = json_decode((string) $this->request->getBody(), true);
+
+        $hooks = new Hooks($this->sandbox, $this->handler, $this->auth);
+
+        $hooks->delete($json['id']);
+
+        return new Response(200);
     }
 }
