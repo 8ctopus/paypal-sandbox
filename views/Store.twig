@@ -19,6 +19,10 @@ input {
   width: 40% !important;
 }
 
+article {
+  white-space: wrap;
+}
+
 </style>
 {% endblock %}
 {% block head %}
@@ -43,8 +47,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.querySelector('button#createSubscription').addEventListener('click', createSubscription);
 
+  document.querySelector('button#createHook').addEventListener('click', () => {
+    createHook();
+    listHooks();
+  });
+
+  document.querySelector('button#deleteHook').addEventListener('click', () => {
+    deleteHook();
+    listHooks();
+  });
+
   listProducts();
-  listPlans();
+  //listPlans();
   listHooks();
 });
 
@@ -223,7 +237,7 @@ async function createHook(event) {
   const url = document.querySelector('input#hookUrl').value;
 
   if (!url) {
-    log(component, 'hook url required', true);
+    log(component, 'webhook url required', true);
     return;
   }
 
@@ -272,6 +286,34 @@ async function createHook(event) {
   log(component, await response.json(), false);
 }
 
+async function deleteHook(event) {
+  const component = 'article#hooks details code';
+
+  const id = document.querySelector('input#hookUrl').value;
+
+  if (!id) {
+    log(component, 'webhook id required', true);
+    return;
+  }
+
+  const response = await fetch({{ createHookUrl }}, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      'id': id,
+    }),
+  });
+
+  if (!response.ok) {
+    log(component, await response.text(), true);
+    return;
+  }
+
+  log(component, '', false);
+}
+
 function log(component, message, logToConsole) {
   if (logToConsole) {
     console.log(message);
@@ -288,7 +330,7 @@ function log(component, message, logToConsole) {
     <h1> orders (one-time payments) </h1>
     <button data-currency="USD" data-amount=3>Chocolate Ice Cream $3</button>
     <button data-currency="USD" data-amount=3>Vanilla Ice Cream $3</button>
-    <details open>
+    <details>
       <summary>order</summary>
       <code></code>
     </details>
@@ -300,8 +342,7 @@ function log(component, message, logToConsole) {
     Once you have a plan, you can subscribe. </p>
     <input id="planId" type="text"/>
     <button id="createSubscription">Subscribe to copilot</button>
-    <details open>
-      <summary>output</summary>
+    <details>
       <code></code>
     </details>
   </article>
@@ -309,8 +350,7 @@ function log(component, message, logToConsole) {
   <article id="products" class="component">
     <h1> products </h1>
     <button id="createProduct">create product</button>
-    <details open>
-      <summary>products</summary>
+    <details>
       <code>loading...</code>
     </details>
   </article>
@@ -319,18 +359,18 @@ function log(component, message, logToConsole) {
     <h1> plans </h1>
     <input id="productId" type="text"/>
     <button id="createPlan">create plan</button>
-    <details open>
+    <details>
       <code>loading...</code>
     </details>
   </article>
 
-  <article id="webooks" class="component">
+  <article id="hooks" class="component">
     <h1> webhooks </h1>
-    <p> To receive notifications about PayPal events (new payments, subscriptions, etc...), you need to setup a webhook. </p>
+    <p> To receive notifications about PayPal events (new payments, subscriptions, etc...), you need to setup a webhook. For the webhook to be received on your development machine, you will need to use ngrok or a similar tool. </p>
     <input id="hookUrl" type="text"/>
     <button id="createHook">create webhook</button>
     <button id="deleteHook">delete webhook</button>
-    <details open>
+    <details>
       <code>loading...</code>
     </details>
   </article>
