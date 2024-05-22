@@ -1,6 +1,15 @@
 {% set title = "Store" %}
 {% extends "Base.twig" %}
 {% block css %}
+
+<style type="text/css">
+
+div.subscription {
+  margin-top: 2rem;
+}
+
+</style>
+
 {% endblock %}
 {% block head %}
 <script type="module">
@@ -136,6 +145,7 @@ async function createSubscription(event) {
   <div class="subscription">
     <h1> Subscription </h1>
     <p> For subscriptions, you first need to create a product, then a plan that uses that product. Finally, you can get users to subscribe </p>
+
     <button id="createProduct">create product</button>
     <button id="createPlan">create plan</button>
     <button id="createSubscription">Mobile internet monthly subscription $3</button>
