@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Oct8pus\Store;
 
-use Exception;
 use HttpSoft\Message\RequestFactory;
 use HttpSoft\Message\Response;
 use HttpSoft\Message\Stream;
@@ -88,7 +87,9 @@ class Routes
     {
         $output = $this->environment->render('Store.twig', [
             'createOrderUrl' => '/create-order/',
+            'productsUrl' => '/products/',
             'createProductUrl' => '/create-product/',
+            'plansUrl' => '/plans/',
             'createPlanUrl' => '/create-plan/',
             'createSubscriptionUrl' => '/create-subscription/',
         ]);
@@ -154,18 +155,44 @@ class Routes
         return new Response(200, ['Content-Type' => 'text/html'], $stream);
     }
 
-    public function createProduct() : ResponseInterface
+    public function products() : ResponseInterface
     {
         $products = new Products($this->sandbox, $this->handler, $this->auth);
 
+        $response = $products->list();
+
+        $stream = new Stream();
+        $stream->write(json_encode($response, JSON_PRETTY_PRINT));
+
+        return new Response(200, ['content-type' => 'application/json'], $stream);
+    }
+
+    public function createProduct() : ResponseInterface
+    {
+        $json = json_decode((string) $this->request->getBody(), true);
+
+        $products = new Products($this->sandbox, $this->handler, $this->auth);
+
         $response = $products->create([
-            'name' => 'Test Product',
-            'description' => 'Test Product Description',
-            'type' => 'Digital Goods', // Physical Goods, Digital Goods, Service
-            'category' => 'Software', // Software
-            'home_url' => 'http://localhost/',
-            'image_url' => 'http://localhost/image.jpg',
+            'name' => $json['name'],
+            'description' => $json['description'],
+            'type' => $json['type'], // Physical Goods, Digital Goods, Service
+            'category' => $json['category'], // Software
+            'home_url' => $json['homeUrl'],
+            'image_url' => $json['imageUrl'],
         ]);
+
+        $stream = new Stream();
+        $stream->write(json_encode($response, JSON_PRETTY_PRINT));
+
+        return new Response(200, ['content-type' => 'application/json'], $stream);
+    }
+
+    public function plans() : ResponseInterface
+    {
+        $plans = new Plans($this->sandbox, $this->handler, $this->auth);
+
+        $response = $plans->list();
 
         $stream = new Stream();
         $stream->write(json_encode($response, JSON_PRETTY_PRINT));
@@ -175,30 +202,20 @@ class Routes
 
     public function createPlan() : ResponseInterface
     {
-        throw new Exception();
+        $json = json_decode((string) $this->request->getBody(), true);
 
         $plans = new Plans($this->sandbox, $this->handler, $this->auth);
 
-        /*
         $billingCycles = (new BillingCycles())
-            ->add(new BillingCycle(TenureType::Trial, new Frequency(IntervalUnit::Month, 1), 2, new PricingScheme(3, 'USD')))
-            ->add(new BillingCycle(TenureType::Trial, new Frequency(IntervalUnit::Month, 1), 3, new PricingScheme(6, 'USD')))
-            ->add(new BillingCycle(TenureType::Regular, new Frequency(IntervalUnit::Month, 1), 12, new PricingScheme(10, 'USD')));
+            ->add(new BillingCycle(TenureType::Regular, new Frequency(IntervalUnit::Month, 1), 0, new PricingScheme($json['price'], $json['currency'])));
 
-        $paymentPreferences = new PaymentPreferences(true, 10, SetupFeeFailure::Continue, 3);
-        $taxes = new Taxes(0.10, false);
-        */
-
-        $billingCycles = (new BillingCycles())
-            ->add(new BillingCycle(TenureType::Regular, new Frequency(IntervalUnit::Month, 1), 0, new PricingScheme(4.99, 'USD')));
-
-        $paymentPreferences = new PaymentPreferences(true, 0, SetupFeeFailure::Continue, 1);
+        $paymentPreferences = new PaymentPreferences(true, $json['currency'], $json['setupFee'], SetupFeeFailure::Continue, 1);
         $taxes = new Taxes(0, false);
 
         $response = $plans->create(
-            'product_id',
-            'plan name',
-            'plan description',
+            $json['product'],
+            $json['name'],
+            $json['description'],
             Status::Active,
             $billingCycles,
             $paymentPreferences,
@@ -213,9 +230,11 @@ class Routes
 
     public function createSubscription() : ResponseInterface
     {
+        $json = json_decode((string) $this->request->getBody(), true);
+
         $subscriptions = new Subscriptions($this->sandbox, $this->handler, $this->auth);
 
-        $response = $subscriptions->create($planId, $successUrl, $cancelUrl);
+        $response = $subscriptions->create($json['planId'], $json['successUrl'], $json['cancelUrl']);
 
         foreach ($response['links'] as $link) {
             if ($link['rel'] === 'approve') {

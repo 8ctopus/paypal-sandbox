@@ -7,21 +7,44 @@ article#subscription {
   margin-top: 2rem;
 }
 
+details {
+  margin-top: 1rem;
+}
+
+code {
+  white-space: pre-wrap;
+}
+
+input {
+  width: 40% !important;
+}
+
 </style>
 {% endblock %}
 {% block head %}
 <script type="module">
 
 document.addEventListener('DOMContentLoaded', () => {
-  const buttons = document.querySelectorAll('article#onetime > button');
+  const buttons = document.querySelectorAll('article#order > button');
 
-  buttons.forEach(function (button) {
+  buttons.forEach((button) => {
     button.addEventListener('click', createOrder);
   });
 
-  document.querySelector('button#createProduct').addEventListener('click', createProduct);
-  document.querySelector('button#createPlan').addEventListener('click', createPlan);
+  document.querySelector('button#createProduct').addEventListener('click', () => {
+    createProduct();
+    listProducts();
+  });
+
+  document.querySelector('button#createPlan').addEventListener('click', () => {
+    createPlan();
+    listPlans();
+  });
+
   document.querySelector('button#createSubscription').addEventListener('click', createSubscription);
+
+  listProducts();
+  listPlans();
 });
 
 async function createOrder(event) {
@@ -39,16 +62,38 @@ async function createOrder(event) {
     }),
   });
 
+  const component = 'article#order details code';
+
   if (!response.ok) {
-    console.error(response.statusText);
+    log(component, response.statusText, true);
     return;
   }
 
   const json = await response.json();
 
-  console.log(json.result);
+  log(component, json.result, false);
 
   window.location = json.redirect;
+}
+
+async function listProducts()
+{
+  const response = await fetch({{ productsUrl }});
+
+  const component = 'article#products details code';
+
+  if (!response.ok) {
+    log(component, response.statusText, true);
+    return;
+  }
+
+  const text = await response.text();
+
+  log(component, text, false);
+
+  const json = JSON.parse(text);
+
+  document.querySelector('input#productId').value = json[0].id;
 }
 
 async function createProduct(event) {
@@ -58,45 +103,75 @@ async function createProduct(event) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      name: 'Mobile internet monthly subscription',
+      name: 'Copilot',
+      description: 'Copilot helps you write code faster',
       type: 'service',
+      category: 'software',
+      homeUrl: 'https://copilot.github.com',
+      imageUrl: 'https://copilot.github.com/copilot.png',
     }),
   });
 
-  const textArea = document.querySelector('textarea');
+  const component = 'article#products details code';
 
   if (!response.ok) {
-      textArea.innerText = await response.text();
+    log(component, await response.text(), true);
     return;
   }
 
-  const json = await response.json();
+  log(component, await response.json(), false);
+}
 
-  textArea.innerText = json.result;
+async function listPlans() {
+  const response = await fetch({{ plansUrl }});
+
+  const component = 'article#plans details code';
+
+  if (!response.ok) {
+    log(component, response.statusText, true);
+    return;
+  }
+
+  const text = await response.text();
+
+  log(component, text, false);
+
+  const json = JSON.parse(text);
+
+  document.querySelector('input#planId').value = json[0].id;
 }
 
 async function createPlan(event) {
+  const component = 'article#plans details code';
+
+  const product = document.querySelector('input#productId').value;
+
+  if (!product) {
+    log(component, 'product ID required', true);
+    return;
+  }
+
   const response = await fetch({{ createPlanUrl }}, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      name: 'Mobile internet monthly subscription',
-      type: 'service',
+      product: product,
+      name: 'Single user',
+      description: 'Copilot for a single user',
+      currency: 'USD',
+      price: 3.00,
+      setupFee: 10.00,
     }),
   });
 
   if (!response.ok) {
-    console.error(response.statusText);
+    log(component, response.statusText, true);
     return;
   }
 
-  const json = await response.json();
-
-  const textArea = document.querySelector('textarea');
-
-  textArea.innerText = json.result;
+  log(component, await response.json(), false);
 }
 
 async function createSubscription(event) {
@@ -108,56 +183,75 @@ async function createSubscription(event) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      amount: button.dataset.amount,
-      currency: button.dataset.currency,
-      description: button.textContent,
+      planId: 'x',
+      successUrl: 'http://localhost/subscription/success/',
+      cancelUrl: 'http://localhost/subscription/cancel/',
     }),
   });
 
+  const component = 'article#subscription textarea';
+
   if (!response.ok) {
-    console.error(response.statusText);
+    log(component, response.statusText, true);
     return;
   }
 
   const json = await response.json();
 
-  console.log(json.result);
+  log(component, json.result, false);
 
   window.location = json.redirect;
+}
+
+function log(component, message, console) {
+  document.querySelector(component).innerText = message;
+
+  if (console) {
+    console.log(message);
+  }
 }
 
 </script>
 {% endblock %}
 {% block body %}
 <div class="container">
-  <article id="onetime" class="component">
+  <article id="order" class="component">
     <h1> One-time payment </h1>
     <button data-currency="USD" data-amount=3>Chocolate Ice Cream $3</button>
     <button data-currency="USD" data-amount=3>Vanilla Ice Cream $3</button>
+    <details open>
+      <summary>order</summary>
+      <code></code>
+    </details>
   </article>
 
   <article id="subscription" class="component">
     <h1> Subscription </h1>
     <p> For subscriptions, you first need to create a product, then a plan that uses that product.<br>
     Once you have a plan, you can subscribe. </p>
-    <button id="createSubscription">Mobile internet monthly subscription $3</button>
+    <input id="planId" type="text"/>
+    <button id="createSubscription">Subscribe to copilot</button>
+    <details open>
+      <summary>output</summary>
+      <code></code>
+    </details>
   </article>
 
   <article id="products" class="component">
-    <textarea>
-    </textarea>
     <button id="createProduct">create product</button>
+    <details open>
+      <summary>products</summary>
+      <code></code>
+    </details>
   </article>
 
   <article id="plans" class="component">
-    <textarea>
-    </textarea>
+    <input id="productId" type="text"/>
     <button id="createPlan">create plan</button>
-  </article>
-
-  <article class="component">
-    <textarea>
-    </textarea>
+    <details open>
+      <summary>plans</summary>
+      <code></code>
+    </details>
   </article>
 </div>
 {% endblock %}
