@@ -88,12 +88,12 @@ class Routes
     {
         $output = $this->environment->render('Store.twig', [
             'createOrderUrl' => '/create-order/',
-            'productsUrl' => '/products/',
+            'productsUrl' => '/list-products/',
             'createProductUrl' => '/create-product/',
-            'plansUrl' => '/plans/',
+            'plansUrl' => '/list-plans/',
             'createPlanUrl' => '/create-plan/',
             'createSubscriptionUrl' => '/create-subscription/',
-            'hooksUrl' => '/hooks/',
+            'hooksUrl' => '/list-hooks/',
             'createHookUrl' => '/create-hook/',
         ]);
 

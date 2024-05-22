@@ -41,7 +41,7 @@ $router->addRoute(new Route(RouteType::Exact, 'GET', '/order-cancel/', static fu
         ->showCancel();
 }));
 
-$router->addRoute(new Route(RouteType::Exact, 'GET', '/products/', static function (ServerRequestInterface $request) : ResponseInterface {
+$router->addRoute(new Route(RouteType::Exact, 'GET', '/list-products/', static function (ServerRequestInterface $request) : ResponseInterface {
     return (new Routes($request))
         ->listProducts();
 }));
@@ -51,7 +51,7 @@ $router->addRoute(new Route(RouteType::Exact, 'POST', '/create-product/', static
         ->createProduct();
 }));
 
-$router->addRoute(new Route(RouteType::Exact, 'GET', '/plans/', static function (ServerRequestInterface $request) : ResponseInterface {
+$router->addRoute(new Route(RouteType::Exact, 'GET', '/list-plans/', static function (ServerRequestInterface $request) : ResponseInterface {
     return (new Routes($request))
         ->listPlans();
 }));
@@ -66,7 +66,7 @@ $router->addRoute(new Route(RouteType::Exact, 'POST', '/create-subscription/', s
         ->createSubscription();
 }));
 
-$router->addRoute(new Route(RouteType::Exact, 'POST', '/hooks/', static function (ServerRequestInterface $request) : ResponseInterface {
+$router->addRoute(new Route(RouteType::Exact, 'POST', '/list-hooks/', static function (ServerRequestInterface $request) : ResponseInterface {
     return (new Routes($request))
         ->listHooks();
 }));
