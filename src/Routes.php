@@ -205,9 +205,9 @@ class Routes
         $plans = new Plans($this->sandbox, $this->handler, $this->auth);
 
         $billingCycles = (new BillingCycles())
-            ->add(new BillingCycle(TenureType::Regular, new Frequency(IntervalUnit::Month, 1), 0, new PricingScheme($json['price'], $json['currency'])));
+            ->add(new BillingCycle(TenureType::Regular, new Frequency(IntervalUnit::Month, 1), 0, new PricingScheme((float) $json['price'], $json['currency'])));
 
-        $paymentPreferences = new PaymentPreferences(true, $json['currency'], $json['setupFee'], SetupFeeFailure::Continue, 1);
+        $paymentPreferences = new PaymentPreferences(true, $json['currency'], (float) $json['setupFee'], SetupFeeFailure::Continue, 1);
         $taxes = new Taxes(0, false);
 
         $response = $plans->create(
