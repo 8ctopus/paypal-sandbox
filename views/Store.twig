@@ -57,9 +57,9 @@ document.addEventListener('DOMContentLoaded', () => {
     listHooks();
   });
 
-  //listProducts();
-  //listPlans();
-  //listHooks();
+  listProducts();
+  listPlans();
+  listHooks();
 });
 
 async function createOrder(event) {
@@ -108,7 +108,9 @@ async function listProducts()
 
   const json = JSON.parse(text);
 
-  document.querySelector('input#productId').value = json[0].id;
+  if (json[0] !== undefined) {
+    document.querySelector('input#productId').value = json[0].id;
+  }
 }
 
 async function createProduct(event) {
@@ -151,7 +153,9 @@ async function listPlans() {
 
   const json = JSON.parse(text);
 
-  document.querySelector('input#planId').value = json[0].id;
+  if (json[0] !== undefined) {
+    document.querySelector('input#planId').value = json[0].id;
+  }
 }
 
 async function createPlan(event) {
@@ -367,6 +371,7 @@ function log(component, message, logToConsole) {
     </details>
     <details>
       <summary>create</summary>
+      <p><b> Once created a product cannot be deleted. </b></p>
       <form>
         <fieldset>
           <input id="name" type="text" placeholder="name" value="Copilot" />
@@ -395,6 +400,7 @@ function log(component, message, logToConsole) {
     </details>
     <details>
       <summary>create</summary>
+      <p><b> Once created a plan cannot be deleted. </b></p>
       <form>
         <input id="productId" type="text" placeholder="product Id" />
         <small>product id</small>

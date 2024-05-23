@@ -15,6 +15,22 @@
       "port": 9000,
       "stopOnEntry": false,
       "request": "launch"
+    },
+    {
+      "name": "js attach to browser",
+      "type": "chrome",
+      "request": "attach",
+      "url": "http://localhost/",
+      "port": 9222,
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "js launch browser",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost",
+      "port": 9222,
+      "webRoot": "${workspaceFolder}"
     }
   ]
 }
