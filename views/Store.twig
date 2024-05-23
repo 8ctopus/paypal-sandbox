@@ -57,9 +57,9 @@ document.addEventListener('DOMContentLoaded', () => {
     listHooks();
   });
 
-  listProducts();
-  listPlans();
-  listHooks();
+  //listProducts();
+  //listPlans();
+  //listHooks();
 });
 
 async function createOrder(event) {
@@ -118,12 +118,12 @@ async function createProduct(event) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      name: document.querySelector('input#name').value,
-      description: document.querySelector('input#description').value,
-      type: document.querySelector('input#type').value,
-      category: document.querySelector('input#category').value,
-      homeUrl: document.querySelector('input#homeUrl').value,
-      imageUrl: document.querySelector('input#imageUrl').value,
+      name: document.querySelector('article#products input#name').value,
+      description: document.querySelector('article#products input#description').value,
+      type: document.querySelector('article#products input#type').value,
+      category: document.querySelector('article#products input#category').value,
+      homeUrl: document.querySelector('article#products input#homeUrl').value,
+      imageUrl: document.querySelector('article#products input#imageUrl').value,
     }),
   });
 
@@ -157,7 +157,7 @@ async function listPlans() {
 async function createPlan(event) {
   const component = 'article#plans details code';
 
-  const product = document.querySelector('input#productId').value;
+  const product = document.querySelector('article#plans input#productId').value;
 
   if (!product) {
     log(component, 'product ID required', true);
@@ -171,11 +171,11 @@ async function createPlan(event) {
     },
     body: JSON.stringify({
       product: product,
-      name: 'Single user',
-      description: 'Copilot for a single user',
-      currency: 'USD',
-      price: 3.00,
-      setupFee: 10.00,
+      name: document.querySelector('article#plans input#name').value,
+      description: document.querySelector('article#plans input#description').value,
+      currency: document.querySelector('article#plans input#currency').value,
+      price: document.querySelector('article#plans input#price').value,
+      setupFee: document.querySelector('article#plans input#setupFee').value,
     }),
   });
 
@@ -362,26 +362,55 @@ function log(component, message, logToConsole) {
   <article id="products" class="component">
     <h1> products </h1>
     <details>
-      <summary>details</summary>
+      <summary>product list</summary>
       <code></code>
     </details>
-    <input id="name" type="text" placeholder="name" value="Copilot" />
-    <input id="description" type="text" placeholder="description" value="Your AI assistant" />
-    <input id="type" type="text" placeholder="type" value="service" />
-    <input id="category" type="text" placeholder="category" value="software" />
-    <input id="homeUrl" type="text" placeholder="home url" value="https://copilot.github.com" />
-    <input id="imageUrl" type="text" placeholder="home url" value="https://copilot.github.com/copilot.png" />
-    <button id="createProduct">create product</button>
+    <details>
+      <summary>create product</summary>
+      <form>
+        <fieldset>
+          <input id="name" type="text" placeholder="name" value="Copilot" />
+          <small>name</small>
+          <input id="description" type="text" placeholder="description" value="Your AI assistant" />
+          <small>description</small>
+          <input id="type" type="text" placeholder="type" value="service" />
+          <small>type</small>
+          <input id="category" type="text" placeholder="category" value="software" />
+          <small>category</small>
+          <input id="homeUrl" type="text" placeholder="home url" value="https://copilot.github.com" />
+          <small>home url</small>
+          <input id="imageUrl" type="text" placeholder="home url" value="https://copilot.github.com/copilot.png" />
+          <small>image url</small>
+        </fieldset>
+        <button id="createProduct">create product</button>
+      </form>
+    </details>
   </article>
 
   <article id="plans" class="component">
     <h1> plans </h1>
     <details>
-      <summary>details</summary>
+      <summary>plans list</summary>
       <code></code>
     </details>
-    <input id="productId" type="text" placeholder="product Id" />
-    <button id="createPlan">create plan</button>
+    <details>
+      <summary>create plan</summary>
+      <form>
+        <input id="productId" type="text" placeholder="product Id" />
+        <small>product id</small>
+        <input id="name" type="text" placeholder="name" value="Copilot one user" />
+        <small>name</small>
+        <input id="description" type="text" placeholder="description" value="Copilot for one user" />
+        <small>description</small>
+        <input id="currency" type="text" placeholder="currency" value="USD" />
+        <small>currency</small>
+        <input id="price" type="number" placeholder="price" value=3 />
+        <small>price</small>
+        <input id="setupFee" type="number" placeholder="setup fee" value=10 />
+        <small>setup fee</small>
+        <button id="createPlan">create plan</button>
+      </form>
+    </details>
   </article>
 
   <article id="hooks" class="component">
