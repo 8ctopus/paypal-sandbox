@@ -17,6 +17,7 @@
       "request": "launch"
     },
     {
+      // "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222
       "name": "js attach to browser",
       "type": "chrome",
       "request": "attach",
