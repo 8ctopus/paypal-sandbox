@@ -118,12 +118,12 @@ async function createProduct(event) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      name: 'Copilot',
-      description: 'Copilot helps you write code faster',
-      type: 'service',
-      category: 'software',
-      homeUrl: 'https://copilot.github.com',
-      imageUrl: 'https://copilot.github.com/copilot.png',
+      name: document.querySelector('input#name').value,
+      description: document.querySelector('input#description').value,
+      type: document.querySelector('input#type').value,
+      category: document.querySelector('input#category').value,
+      homeUrl: document.querySelector('input#homeUrl').value,
+      imageUrl: document.querySelector('input#imageUrl').value,
     }),
   });
 
@@ -365,6 +365,12 @@ function log(component, message, logToConsole) {
       <summary>details</summary>
       <code></code>
     </details>
+    <input id="name" type="text" placeholder="name" value="Copilot" />
+    <input id="description" type="text" placeholder="description" value="Your AI assistant" />
+    <input id="type" type="text" placeholder="type" value="service" />
+    <input id="category" type="text" placeholder="category" value="software" />
+    <input id="homeUrl" type="text" placeholder="home url" value="https://copilot.github.com" />
+    <input id="imageUrl" type="text" placeholder="home url" value="https://copilot.github.com/copilot.png" />
     <button id="createProduct">create product</button>
   </article>
 
