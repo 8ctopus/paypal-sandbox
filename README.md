@@ -21,3 +21,5 @@ php -S localhost:80 public/router.php
 ```
 
 - Finally head to `http://localhost` in your browser
+
+The demo automatically lists all products, plans and existing webhooks.

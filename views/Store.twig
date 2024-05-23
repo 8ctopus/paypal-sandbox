@@ -300,7 +300,7 @@ async function createHook(event) {
 async function deleteHook(event) {
   const component = 'article#hooks details code';
 
-  const id = document.querySelector('input#hookUrl').value;
+  const id = document.querySelector('input#hookId').value;
 
   if (!id) {
     log(component, 'webhook id required', true);
@@ -349,8 +349,8 @@ function log(component, message, logToConsole) {
 
   <article id="subscriptions" class="component">
     <h1> subscriptions (auto-renewing payments) </h1>
-    <p> For subscriptions, you first need to create a product, then a plan that uses that product.<br>
-    Once you have a plan, you can subscribe. </p>
+    <p> To test subscriptions, you first need to create a product, then a plan that uses that product.<br>
+    Once you have a plan, you can test the subscription process. </p>
     <input id="planId" type="text" placeholder="plan Id" />
     <button id="createSubscription">Subscribe</button>
     <details>
@@ -362,11 +362,11 @@ function log(component, message, logToConsole) {
   <article id="products" class="component">
     <h1> products </h1>
     <details>
-      <summary>product list</summary>
+      <summary>list</summary>
       <code></code>
     </details>
     <details>
-      <summary>create product</summary>
+      <summary>create</summary>
       <form>
         <fieldset>
           <input id="name" type="text" placeholder="name" value="Copilot" />
@@ -390,11 +390,11 @@ function log(component, message, logToConsole) {
   <article id="plans" class="component">
     <h1> plans </h1>
     <details>
-      <summary>plans list</summary>
+      <summary>list</summary>
       <code></code>
     </details>
     <details>
-      <summary>create plan</summary>
+      <summary>create</summary>
       <form>
         <input id="productId" type="text" placeholder="product Id" />
         <small>product id</small>
@@ -415,14 +415,21 @@ function log(component, message, logToConsole) {
 
   <article id="hooks" class="component">
     <h1> webhooks </h1>
-    <p> To receive notifications about PayPal events (new payments, subscriptions, etc...), you need to setup a webhook. For the webhook to be received on your development machine, you will need to use ngrok or a similar tool. </p>
+    <p> To receive notifications when PayPal events occur (new payments, subscriptions, etc...), you need to setup a webhook. For the webhook to be received on your development machine, you will need to use ngrok or a similar tool. </p>
     <details>
-      <summary>details</summary>
+      <summary>list</summary>
       <code></code>
     </details>
-    <input id="hookUrl" type="text" placeholder="webhook url (create) or id (delete)" />
-    <button id="createHook">create webhook</button>
-    <button id="deleteHook">delete webhook</button>
+    <details>
+      <summary>create</summary>
+      <input id="hookUrl" type="text" placeholder="webhook url" />
+      <button id="createHook">create</button>
+    </details>
+    <details>
+      <summary>delete</summary>
+      <input id="hookId" type="text" placeholder="webhook id" />
+      <button id="deleteHook">delete</button>
+    </details>
   </article>
 </div>
 {% endblock %}
