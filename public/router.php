@@ -82,6 +82,16 @@ $router->addRoute(new Route(RouteType::Exact, 'DELETE', '/hooks/', static functi
         ->deleteHook();
 }));
 
+$router->addRoute(new Route(RouteType::Exact, 'GET', '/hooks/simulate/', static function (ServerRequestInterface $request) : ResponseInterface {
+    return (new Routes($request))
+        ->simulateHook();
+}));
+
+$router->addRoute(new Route(RouteType::Exact, 'POST', '/hooks/notify/', static function (ServerRequestInterface $request) : ResponseInterface {
+    return (new Routes($request))
+        ->hookNotification();
+}));
+
 try {
     $response = $router->resolve($serverRequest);
 } catch (Exception $exception) {

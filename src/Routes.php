@@ -93,6 +93,8 @@ class Routes
             'createSubscriptionUrl' => '/subscriptions/',
             'hooksUrl' => '/hooks/',
             'createHookUrl' => '/hooks/',
+            'deleteHookUrl' => '/hooks/',
+            'simulateHookUrl' => '/hooks/simulate/',
         ]);
 
         $stream = new Stream();
@@ -281,6 +283,27 @@ class Routes
         $hooks = new Hooks($this->sandbox, $this->handler, $this->auth);
 
         $hooks->delete($json['id']);
+
+        return new Response(200);
+    }
+
+    public function simulateHook() : ResponseInterface
+    {
+        $json = json_decode((string) $this->request->getBody(), true);
+
+        $hooks = new Hooks($this->sandbox, $this->handler, $this->auth);
+
+        $response = $hooks->simulate($json['id'], $json['eventType']);
+
+        $stream = new Stream();
+        $stream->write(json_encode($response, JSON_PRETTY_PRINT));
+
+        return new Response(200, ['content-type' => 'application/json'], $stream);
+    }
+
+    public function hookNotification() : ResponseInterface
+    {
+        $json = json_decode((string) $this->request->getBody(), true);
 
         return new Response(200);
     }

@@ -57,6 +57,8 @@ document.addEventListener('DOMContentLoaded', () => {
     listHooks();
   });
 
+  document.querySelector('button#simulateHook').addEventListener('click', simulateHook);
+
   listProducts();
   listPlans();
   listHooks();
@@ -65,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
 async function createOrder(event) {
   const button = event.target;
 
-  const response = await fetch({{ createOrderUrl }}, {
+  const response = await fetch('{{ createOrderUrl }}', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -93,7 +95,7 @@ async function createOrder(event) {
 
 async function listProducts()
 {
-  const response = await fetch({{ productsUrl }});
+  const response = await fetch('{{ productsUrl }}');
 
   const component = 'article#products details code';
 
@@ -114,7 +116,7 @@ async function listProducts()
 }
 
 async function createProduct(event) {
-  const response = await fetch({{ createProductUrl }}, {
+  const response = await fetch('{{ createProductUrl }}', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -138,7 +140,7 @@ async function createProduct(event) {
 }
 
 async function listPlans() {
-  const response = await fetch({{ plansUrl }});
+  const response = await fetch('{{ plansUrl }}');
 
   const component = 'article#plans details code';
 
@@ -168,7 +170,7 @@ async function createPlan(event) {
     return;
   }
 
-  const response = await fetch({{ createPlanUrl }}, {
+  const response = await fetch('{{ createPlanUrl }}', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -205,7 +207,7 @@ async function createSubscription(event) {
     return;
   }
 
-  const response = await fetch({{ createSubscriptionUrl }}, {
+  const response = await fetch('{{ createSubscriptionUrl }}', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -232,7 +234,7 @@ async function createSubscription(event) {
 }
 
 async function listHooks() {
-  const response = await fetch({{ hooksUrl }});
+  const response = await fetch('{{ hooksUrl }}');
 
   const component = 'article#hooks details code';
 
@@ -249,14 +251,14 @@ async function listHooks() {
 async function createHook(event) {
   const component = 'article#hooks details code';
 
-  const url = document.querySelector('input#hookUrl').value;
+  const url = document.querySelector('input#hookUrl').value + '/hooks/notify/';
 
   if (!url) {
     log(component, 'webhook url required', true);
     return;
   }
 
-  const response = await fetch({{ createHookUrl }}, {
+  const response = await fetch('{{ createHookUrl }}', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -304,20 +306,49 @@ async function createHook(event) {
 async function deleteHook(event) {
   const component = 'article#hooks details code';
 
-  const id = document.querySelector('input#hookId').value;
+  const id = document.querySelector('article#hooks details#delete input#hookId').value;
 
   if (!id) {
     log(component, 'webhook id required', true);
     return;
   }
 
-  const response = await fetch({{ createHookUrl }}, {
+  const response = await fetch('{{ deleteHookUrl }}', {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       'id': id,
+    }),
+  });
+
+  if (!response.ok) {
+    log(component, await response.text(), true);
+    return;
+  }
+
+  log(component, '', false);
+}
+
+async function simulateHook(event) {
+  const component = 'article#hooks details code';
+
+  const id = document.querySelector('article#hooks details#simulate input#hookId').value;
+
+  if (!id) {
+    log(component, 'webhook id required', true);
+    return;
+  }
+
+  const response = await fetch('{{ simulateHookUrl }}', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      'id': id,
+      'eventType': document.querySelector('article#hooks details#simulate input#eventType').value,
     }),
   });
 
@@ -410,9 +441,9 @@ function log(component, message, logToConsole) {
         <small>description</small>
         <input id="currency" type="text" placeholder="currency" value="USD" />
         <small>currency</small>
-        <input id="price" type="number" placeholder="price" value=3 />
+        <input id="price" type="number" placeholder="price" value=3.00 />
         <small>price</small>
-        <input id="setupFee" type="number" placeholder="setup fee" value=10 />
+        <input id="setupFee" type="number" placeholder="setup fee" value=10.00 />
         <small>setup fee</small>
         <button id="createPlan">create plan</button>
       </form>
@@ -421,7 +452,7 @@ function log(component, message, logToConsole) {
 
   <article id="hooks" class="component">
     <h1> webhooks </h1>
-    <p> To receive notifications when PayPal events occur (new payments, subscriptions, etc...), you need to setup a webhook. For the webhook to be received on your development machine, you will need to use ngrok or a similar tool. </p>
+    <p> To receive notifications when PayPal events occur (new payments, subscriptions, etc...), you need to setup a webhook. For the webhook to be received on your development machine, you will need to use ngrok or a similar tool. The command is ngrok http 80</p>
     <details>
       <summary>list</summary>
       <code></code>
@@ -429,12 +460,22 @@ function log(component, message, logToConsole) {
     <details>
       <summary>create</summary>
       <input id="hookUrl" type="text" placeholder="webhook url" />
+      <small>ngrok url eg. https://5753-31-218-65-185.ngrok-free.app</small>
       <button id="createHook">create</button>
     </details>
-    <details>
+    <details id="delete">
       <summary>delete</summary>
       <input id="hookId" type="text" placeholder="webhook id" />
+      <small>hook id</small>
       <button id="deleteHook">delete</button>
+    </details>
+    <details id="simulate">
+      <summary>simulate</summary>
+      <input id="hookId" type="text" placeholder="webhook id" />
+      <small>hook id</small>
+      <input id="eventType" type="text" placeholder="event type" value="BILLING.SUBSCRIPTION.CREATED" />
+      <small>event type</small>
+      <button id="simulateHook">simulate</button>
     </details>
   </article>
 </div>
