@@ -2,6 +2,12 @@
 
 A sandbox to demonstrate PayPal payments and subscriptions with the REST API.
 
+## requirements
+
+- php 8.x installed
+- composer installed
+- ngrok installed
+
 ## demo
 
 Install composer dependencies
@@ -18,6 +24,12 @@ composer install
 
 ```sh
 php -S localhost:80 public/router.php
+```
+
+- Start ngrok to receive PayPal notifications to your development environment
+
+```sh
+ngrok http 80
 ```
 
 - Finally head to `http://localhost` in your browser
