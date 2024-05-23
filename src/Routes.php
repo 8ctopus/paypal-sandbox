@@ -135,7 +135,7 @@ class Routes
         try {
             $response = $this->orders->capture($params['token']);
 
-            $output = $this->environment->render('Success.twig', []);
+            $output = $this->environment->render('OrderSuccess.twig', []);
 
             $stream = new Stream();
             $stream->write($output);
@@ -148,7 +148,7 @@ class Routes
 
     public function showCancel() : ResponseInterface
     {
-        $output = $this->environment->render('Cancel.twig', []);
+        $output = $this->environment->render('OrderCancel.twig', []);
 
         $stream = new Stream();
         $stream->write($output);
