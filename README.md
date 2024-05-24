@@ -55,7 +55,8 @@ ngrok http 80
 
 The demo when started automatically lists all existing products, plans and webhooks.
 
-If you never used the PayPal REST api before, you will need to create a product, a plan and a webhook before you can use subscriptions.
+Once started, you can place an order (use the ngrok url as return url)
+For subscriptions, if you never used the PayPal REST api before, you will need to create a product, a plan and a webhook first.
 
 ## debugging
 
