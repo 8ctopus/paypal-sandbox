@@ -4,7 +4,7 @@ A PayPal REST api sandbox to experiment with payments and subscriptions
 
 ![php sandbox screenshot](https://github.com/8ctopus/paypal-sandbox/raw/master/screenshot.png)
 
-Contributions welcome!
+I did my best to make easy to get started experimenting with the PayPal REST API. If something is not clear or can be improved, your contribution is welcome!
 
 ## features
 
