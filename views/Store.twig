@@ -74,6 +74,15 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function createOrder(event) {
+  const component = 'article#orders details code';
+
+  const url = document.querySelector('article#orders input#returnUrl').value;
+
+  if (!url) {
+    log(component, 'return url required', true);
+    return;
+  }
+
   const button = event.target;
 
   const response = await fetch('{{ createOrderUrl }}', {
@@ -85,10 +94,10 @@ async function createOrder(event) {
       amount: button.dataset.amount,
       currency: button.dataset.currency,
       description: button.textContent,
+      successUrl: url + '/order-success/',
+      cancelUrl: url + '/order-cancel/',
     }),
   });
-
-  const component = 'article#orders details code';
 
   if (!response.ok) {
     log(component, await response.text(), true);
@@ -99,7 +108,7 @@ async function createOrder(event) {
 
   log(component, json.result, false);
 
-  window.location = json.redirect;
+  window.location = 'https://www.sandbox.paypal.com/checkoutnow?token=' + json.id;
 }
 
 async function listProducts()
@@ -224,8 +233,8 @@ async function createSubscription(event) {
     },
     body: JSON.stringify({
       planId: planId,
-      successUrl: url + '/success/',
-      cancelUrl: url + '/cancel/',
+      successUrl: url + '/subscription-success/',
+      cancelUrl: url + '/subscription-cancel/',
     }),
   });
 
@@ -238,7 +247,11 @@ async function createSubscription(event) {
 
   log(component, json.result, false);
 
-  window.location = json.redirect;
+  for (const link of json.links) {
+    if (link.rel === 'approve') {
+      window.location = link.href;
+    }
+  }
 }
 
 async function listHooks() {
@@ -262,7 +275,10 @@ async function listHooks() {
     document.querySelector('article#hooks details#simulate input#hookId').value = json[0].id;
 
     const url = new URL(json[0].url);
-    document.querySelector('article#subscriptions input#returnUrl').value = url.protocol + '//' + url.hostname;
+    const returnUrl = url.protocol + '//' + url.hostname;
+
+    document.querySelector('article#orders input#returnUrl').value = returnUrl;
+    document.querySelector('article#subscriptions input#returnUrl').value = returnUrl;
   }
 }
 
@@ -392,6 +408,8 @@ function log(component, message, logToConsole) {
 <div class="container">
   <article id="orders" class="component">
     <h1> orders (one-time payments) </h1>
+    <input id="returnUrl" type="text" placeholder="return url" />
+    <small>return url</small>
     <button data-currency="USD" data-amount=3>Chocolate Ice Cream $3</button>
     <button data-currency="USD" data-amount=3>Vanilla Ice Cream $3</button>
     <details>

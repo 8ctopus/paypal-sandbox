@@ -36,6 +36,16 @@ $router->addRoute(new Route(RouteType::Exact, 'GET', '/order-cancel/', static fu
         ->showCancel();
 }));
 
+$router->addRoute(new Route(RouteType::Exact, 'GET', '/subscription-success/', static function (ServerRequestInterface $request) : ResponseInterface {
+    return (new Routes($request))
+        ->showSubscriptionSuccess();
+}));
+
+$router->addRoute(new Route(RouteType::Exact, 'GET', '/subscription-cancel/', static function (ServerRequestInterface $request) : ResponseInterface {
+    return (new Routes($request))
+        ->showSubscriptionCancel();
+}));
+
 // from here only API routes
 $router->addRoute(new Route(RouteType::Exact, 'POST', '/orders/', static function (ServerRequestInterface $request) : ResponseInterface {
     return (new Routes($request))

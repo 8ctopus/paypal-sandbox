@@ -105,27 +105,12 @@ class Routes
 
     public function createOrder() : ResponseInterface
     {
-        /*
-        $orders = new Orders($sandbox, $this->handler, $auth);
-        dump($orders->get($args['id']));
-        */
-
         $json = json_decode((string) $this->request->getBody(), true);
 
-        try {
-            $response = $this->orders->create(Intent::Capture, $json['currency'], (int) $json['amount'], 'http://localhost/success/', 'http://localhost/cancel/');
-        } catch (PayPalException $exception) {
-            throw $exception;
-        }
-
-        $redirect = "https://www.sandbox.paypal.com/checkoutnow?token={$response['id']}";
+        $response = $this->orders->create(Intent::Capture, $json['currency'], (int) $json['amount'], $json['successUrl'], $json['cancelUrl']);
 
         $stream = new Stream();
-        $stream->write(json_encode([
-            'result' => 'OK',
-            'order' => $response['id'],
-            'redirect' => $redirect,
-        ], JSON_PRETTY_PRINT));
+        $stream->write(json_encode($response, JSON_PRETTY_PRINT));
 
         return new Response(200, ['Content-Type' => 'application/json'], $stream);
     }
@@ -236,18 +221,32 @@ class Routes
 
         $response = $subscriptions->create($json['planId'], $json['successUrl'], $json['cancelUrl']);
 
-        foreach ($response['links'] as $link) {
-            if ($link['rel'] === 'approve') {
-                break;
-            }
-        }
-
-        $response['_aaa'] = "redirect user to {$link['href']} to approve the subscription";
-
         $stream = new Stream();
         $stream->write(json_encode($response, JSON_PRETTY_PRINT));
 
         return new Response(200, ['content-type' => 'application/json'], $stream);
+    }
+
+    public function showSubscriptionSuccess() : ResponseInterface
+    {
+        $params = $this->request->getQueryParams();
+
+        $output = $this->environment->render('SubscriptionSuccess.twig', []);
+
+        $stream = new Stream();
+        $stream->write($output);
+
+        return new Response(200, ['Content-Type' => 'text/html'], $stream);
+    }
+
+    public function showSubscriptionCancel() : ResponseInterface
+    {
+        $output = $this->environment->render('SubscriptionCancel.twig', []);
+
+        $stream = new Stream();
+        $stream->write($output);
+
+        return new Response(200, ['Content-Type' => 'text/html'], $stream);
     }
 
     public function listHooks() : ResponseInterface
