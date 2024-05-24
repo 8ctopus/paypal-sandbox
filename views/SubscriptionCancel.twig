@@ -1,0 +1,21 @@
+{% set title = "Payment success" %}
+{% extends "Base.twig" %}
+{% block head %}
+<script type="module">
+
+document.addEventListener('DOMContentLoaded', () => {
+  const span = document.querySelector('span');
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const subscriptionId = urlParams.get('subscription_id');
+
+  span.innerHTML = subscriptionId;
+});
+
+</script>
+{% endblock %}
+{% block body %}
+<div class="container">
+  Subscription <span></span> canceled
+</div>
+{% endblock %}
