@@ -28,13 +28,17 @@ input {
   width: 40% !important;
 }
 
+button {
+  margin-bottom: 1rem;
+}
+
 </style>
 {% endblock %}
 {% block head %}
 <script type="module">
 
 document.addEventListener('DOMContentLoaded', () => {
-  const buttons = document.querySelectorAll('article#order > button');
+  const buttons = document.querySelectorAll('article#orders > button');
 
   buttons.forEach((button) => {
     button.addEventListener('click', createOrder);
@@ -84,7 +88,7 @@ async function createOrder(event) {
     }),
   });
 
-  const component = 'article#order details code';
+  const component = 'article#orders details code';
 
   if (!response.ok) {
     log(component, await response.text(), true);
@@ -199,8 +203,9 @@ async function createPlan(event) {
 }
 
 async function createSubscription(event) {
-  const planId = document.querySelector('input#planId').value;
-  const url = document.querySelector('input#hookUrl').value;
+  const planId = document.querySelector('article#subscriptions input#planId').value;
+  const url = document.querySelector('article#subscriptions input#returnUrl').value;
+  const component = 'article#subscriptions details code';
 
   if (!planId) {
     log(component, 'plan id required', true);
@@ -208,7 +213,7 @@ async function createSubscription(event) {
   }
 
   if (!url) {
-    log(component, 'webhook url required', true);
+    log(component, 'return url required', true);
     return;
   }
 
@@ -223,8 +228,6 @@ async function createSubscription(event) {
       cancelUrl: url + '/cancel/',
     }),
   });
-
-  const component = 'article#subscriptions details code';
 
   if (!response.ok) {
     log(component, await response.text(), true);
@@ -251,6 +254,16 @@ async function listHooks() {
   }
 
   log(component, text, false);
+
+  const json = JSON.parse(text);
+
+  if (json[0] !== undefined) {
+    document.querySelector('article#hooks details#delete input#hookId').value = json[0].id;
+    document.querySelector('article#hooks details#simulate input#hookId').value = json[0].id;
+
+    const url = new URL(json[0].url);
+    document.querySelector('article#subscriptions input#returnUrl').value = url.protocol + '//' + url.hostname;
+  }
 }
 
 async function createHook(event) {
@@ -377,7 +390,7 @@ function log(component, message, logToConsole) {
 {% endblock %}
 {% block body %}
 <div class="container">
-  <article id="order" class="component">
+  <article id="orders" class="component">
     <h1> orders (one-time payments) </h1>
     <button data-currency="USD" data-amount=3>Chocolate Ice Cream $3</button>
     <button data-currency="USD" data-amount=3>Vanilla Ice Cream $3</button>
@@ -392,6 +405,9 @@ function log(component, message, logToConsole) {
     <p> To test subscriptions, you first need to create a product, then a plan that uses that product.<br>
     Once you have a plan, you can test the subscription process. </p>
     <input id="planId" type="text" placeholder="plan Id" />
+    <small>plan id</small>
+    <input id="returnUrl" type="text" placeholder="return url" />
+    <small>return url</small>
     <button id="createSubscription">Subscribe</button>
     <details>
       <summary>details</summary>
