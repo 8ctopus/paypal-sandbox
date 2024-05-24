@@ -51,6 +51,16 @@ php -S localhost:80 public/router.php
 ngrok http 80
 ```
 
-- finally head to `http://localhost` in your browser
+- head to `http://localhost` in your browser
 
 The demo automatically lists all products, plans and existing webhooks. You can create new products, plans and webhooks. You can also create an order (payment) or subscription.
+
+## debugging
+
+To debug the javacript code, the browser needs to be started with the remote debugging option. For example, on Windows:
+
+```sh
+"C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222
+```
+
+Then in Visual Studio Code, use `js attach to browser`.
