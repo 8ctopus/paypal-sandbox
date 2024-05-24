@@ -1,6 +1,6 @@
 # PayPal sandbox
 
-A PayPal REST api sandbox to experiment with payments and subscriptions
+A PayPal REST API sandbox to experiment with payments and subscriptions
 
 ![php sandbox screenshot](https://github.com/8ctopus/paypal-sandbox/raw/master/screenshot.png)
 
