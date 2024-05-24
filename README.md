@@ -4,6 +4,17 @@ A PayPal REST api sandbox to experiment with payments and subscriptions
 
 ![php sandbox screenshot](https://github.com/8ctopus/paypal-sandbox/raw/master/screenshot.png)
 
+Contributions welcome!
+
+## features
+
+- create orders (one-time payments)
+- create subscriptions
+- list and create products
+- list and create plans
+- list, create and delete webhooks
+- process webhook notifications received from PayPal
+
 ## requirements
 
 - php 8.x
