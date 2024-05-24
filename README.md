@@ -12,6 +12,8 @@ A PayPal REST api sandbox to experiment with payments and subscriptions
 
 ## demo
 
+- git clone the project
+
 - install composer dependencies
 
 ```sh
