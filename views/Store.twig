@@ -5,10 +5,24 @@
 
 article {
   margin-top: 2rem;
+  white-space: wrap;
 }
 
 details {
-  margin-top: 1rem;
+  //margin-top: 1rem;
+  padding: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+details:nth-child(odd) {
+  //background: rgba(255, 255, 255, 0.1);
+}
+
+details > summary {
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: gray !important;
 }
 
 code {
@@ -17,10 +31,6 @@ code {
 
 input {
   width: 40% !important;
-}
-
-article {
-  white-space: wrap;
 }
 
 </style>
@@ -342,7 +352,7 @@ async function simulateHook(event) {
   }
 
   const response = await fetch('{{ simulateHookUrl }}', {
-    method: 'GET',
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
@@ -452,7 +462,7 @@ function log(component, message, logToConsole) {
 
   <article id="hooks" class="component">
     <h1> webhooks </h1>
-    <p> To receive notifications when PayPal events occur (new payments, subscriptions, etc...), you need to setup a webhook. For the webhook to be received on your development machine, you will need to use ngrok or a similar tool. The command is ngrok http 80</p>
+    <p> To receive notifications when PayPal events occur (new payments, subscriptions, etc...), you need to setup a webhook. For the webhook to be received on your development machine, you will need to use ngrok or a similar tool. The command for ngrok is `ngrok http 80`</p>
     <details>
       <summary>list</summary>
       <code></code>
