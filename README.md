@@ -53,7 +53,9 @@ ngrok http 80
 
 - head to `http://localhost` in your browser
 
-The demo automatically lists all products, plans and existing webhooks. You can create new products, plans and webhooks. You can also create an order (payment) or subscription.
+The demo when started automatically lists all existing products, plans and webhooks.
+
+If you never used the PayPal REST api before, you will need to create a product, a plan and a webhook before you can use subscriptions.
 
 ## debugging
 
