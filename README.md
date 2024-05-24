@@ -22,6 +22,10 @@ composer install
 
     https://developer.paypal.com/api/rest/
 
+- You will also need both a sandbox user account and sandbox business account. You get those from:
+
+    https://developer.paypal.com/dashboard/accounts
+
 - start the website
 
 ```sh
@@ -36,4 +40,4 @@ ngrok http 80
 
 - finally head to `http://localhost` in your browser
 
-The demo automatically lists all products, plans and existing webhooks.
+The demo automatically lists all products, plans and existing webhooks. You can create new products, plans and webhooks. You can also create an order (payment) or subscription.
