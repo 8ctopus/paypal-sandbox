@@ -6,6 +6,8 @@ A PayPal REST API sandbox to experiment with payments and subscriptions
 
 I did my best to make easy to get started experimenting with the PayPal REST API. If something is not clear or can be improved, your contribution is welcome!
 
+_NOTE_: If you're just starting to use PayPal think twice, as I have found that their apis are unstable, bugs are introduced all the time in production and despite contacting Merchant Technical Support the issues take forever to get fixed. Save yourself the hassle and use a more reliable payment provider.
+
 ## features
 
 - create orders (one-time payments)
